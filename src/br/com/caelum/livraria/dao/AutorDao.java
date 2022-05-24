@@ -23,7 +23,7 @@ public class AutorDao {
 
 	public void salva(Autor autor) {
 		
-		System.out.println("Salvando autor " + autor.getNome());
+//		System.out.println("Salvando autor " + autor.getNome());
 		
 //		try {
 //			Thread.sleep(2000); // 2s
@@ -33,7 +33,7 @@ public class AutorDao {
 		
 		banco.save(autor);
 		
-		System.out.println("Salvou autor " + autor.getNome());
+//		System.out.println("Salvou autor " + autor.getNome());
 	}
 	
 	public List<Autor> todosAutores() {
