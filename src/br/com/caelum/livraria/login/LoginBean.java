@@ -1,15 +1,17 @@
 package br.com.caelum.livraria.login;
 
-import javax.enterprise.inject.Model;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import br.com.caelum.livraria.bean.MenuBean;
 import br.com.caelum.livraria.dao.UsuarioDao;
 import br.com.caelum.livraria.modelo.Usuario;
 
-@Model
+@Named
+@RequestScoped
 public class LoginBean {
 
 	private Usuario usuario = new Usuario();
@@ -29,17 +31,21 @@ public class LoginBean {
 
 	public String efetuaLogin() {
 
-		Usuario usuarioEncontrado = this.dao.buscaPeloLogin(usuario.getLogin());
-
-		if (usuarioEncontrado != null && possuiMesmaSenha(usuarioEncontrado)) {
-			usuarioLogado.logar(usuarioEncontrado);
-			return menu.paginaLivros();
+		try {
+			Usuario usuarioEncontrado = this.dao.buscaPeloLogin(usuario.getLogin());
+			if (usuarioEncontrado != null && possuiMesmaSenha(usuarioEncontrado)) {
+				usuarioLogado.logar(usuarioEncontrado);
+				return menu.paginaLivros();
+			}
+			criaMensagemErro("Senha inválida!");
+			limparForm();
+			return "";
+		} catch (Exception e) {
+			criaMensagemErro("Usuário não encontrado!");
+			limparForm();
+			return "";
 		}
 
-		criaMensagem("Usuário não encontrado!");
-		limparForm();
-
-		return "";
 	}
 
 	public String efetuaLogout() {
@@ -51,7 +57,7 @@ public class LoginBean {
 		this.usuario = new Usuario();
 	}
 
-	private void criaMensagem(String mensagem) {
+	private void criaMensagemErro(String mensagem) {
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, mensagem, ""));
 	}
 
