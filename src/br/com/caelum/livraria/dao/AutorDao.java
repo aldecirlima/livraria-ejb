@@ -34,6 +34,8 @@ public class AutorDao {
 		manager.persist(autor);
 
 //		System.out.println("Salvou autor " + autor.getNome());
+
+//		throw new RuntimeException("Serviço externo deu erro!");
 	}
 
 	public List<Autor> todosAutores() {
